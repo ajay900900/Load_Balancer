@@ -1,0 +1,6 @@
+cryptography==42.0.5
+Flask==2.3.2
+numpy==1.26.4
+pandas==2.2.1
+PyMySQL==1.1.0
+Requests==2.31.0

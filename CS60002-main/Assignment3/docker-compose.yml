@@ -1,0 +1,34 @@
+#docker-compose.yml file
+#-----------------------
+version: "3.9"
+services:
+  load_balancer:
+    build: .
+    image: ds_load_balancer
+    container_name: load_balancer_1
+    ports:
+      - "5000:5000" # Exposing port to host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # This share host’s the docker daemon with the container. Now, the container can spawn other containers just like host
+    privileged: true # This should be true to share the docker daemon
+    networks:
+      pub: # Need to define net1 in the compose file
+        aliases:
+          - load_balancer_1 # Usually same as containername
+  shard_manager:
+    build: shard_manager
+    image: ds_shard_manager
+    container_name: shard_manager_1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # This share host’s the docker daemon with the container. Now, the container can spawn other containers just like host
+    privileged: true # This should be true to share the docker daemon
+    networks:
+      pub: # Need to define net1 in the compose file
+        aliases:
+          - shard_manager_1 # Usually same as containername
+
+networks:
+  pub:
+    name: pub
